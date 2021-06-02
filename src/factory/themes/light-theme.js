@@ -1,6 +1,11 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 import IndieFlower from "../utilities/fonts/Indie_Flower/IndieFlower-Regular.ttf";
 
+/*The following portion of the code doesn't actually do anything right now, there is a bug
+https://github.com/mui-org/material-ui/issues/18901. Keeping this code incase it gets fixed in the future.
+Right now the workaround is adding fonts using @font-face from preview-head.html in storybook. When it comes to the react-app
+we can just add the fonts in index.css.
+*/
 const indieFlower = {
   fontFamily: "IndieFlower",
   fontStyle: "normal",
