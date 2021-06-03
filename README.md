@@ -1,6 +1,6 @@
-![StoryBoook logo](/readme-images/storybook.png)
-![Material UI logo](/readme-images/material-ui.png)
-![AWS Code Artifact logo](/readme-images/aws-codeartifact.png)
+<img src="/readme-images/storybook.png" align="center" alt="StoryBook Logo" width="200"/>
+<img src="/readme-images/material-ui.png" align="center" alt="Material UI logo" width="200"/>
+<img src="/readme-images/aws-codeartifact.png" align="center" alt="AWS Code Artifact logo" width="200"/>
 
 # Storybook Example with Self-hosted Custom Fonts and Material UI Theme, then exporting components to NPM Package in AWS CodeArtifact
 
