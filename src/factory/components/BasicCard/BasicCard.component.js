@@ -1,15 +1,13 @@
 import React from "react";
+
 import { ThemeProvider } from "@material-ui/core/styles";
-import useStyles from "./BasicCard.style";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Link from "@material-ui/core/Link";
+import { Box, Card, CardContent, CardMedia, Link } from "@material-ui/core";
+
 import Typography from "../../utilities/MuiTypography/MuiTypography";
-import Box from "@material-ui/core/Box";
 import PlayButton from "../../utilities/svg/PlayButton";
 import LightTheme from "../../themes/light-theme";
 import DarkTheme from "../../themes/dark-theme";
+import useStyles from "./BasicCard.style";
 
 export default function BasicCard({
   title,
