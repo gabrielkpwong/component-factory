@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="/readme-images/storybook.png" alt="StoryBook Logo" width="200"/>
-  <img src="/readme-images/material-ui.png" alt="Material UI logo" width="200"/>
-  <img src="/readme-images/aws-codeartifact.png" alt="AWS Code Artifact logo" width="200"/>
+  <img src="/readme-images/storybook.png" alt="StoryBook Logo" width="200" style="padding:30px"/>
+  <img src="/readme-images/material-ui.png" alt="Material UI logo" width="200" style="padding:30px"/>
+  <img src="/readme-images/aws-codeartifact.png" alt="AWS Code Artifact logo" width="200" style="padding:30px"/>
 </p>
 
 # Storybook Example with Self-hosted Custom Fonts and Material UI Theme, then exporting components to NPM Package in AWS CodeArtifact
