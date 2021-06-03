@@ -39,7 +39,7 @@ LargeImageCard.args = {
 
 One issue I encountered that was not documented well, was adding [custom self-hosted fonts](https://material-ui.com/customization/typography/#self-hosted-fonts) for Material UI. After doing a lot of digging, I found out there is still an outstanding issue dealing with self-hosted custom fonts ([https://github.com/mui-org/material-ui/issues/18901](https://github.com/mui-org/material-ui/issues/18901)). The work around solution I found is adding the @font-face in preview-head.html in .storybook folder.
 
-![Storybook Folder Structure](/readme-images/storybook-structure.png)
+<img src="/readme-images/storybook-structure.png" alt="Storybook Folder Structure" width="400"/>
 
 ```
 <style type="text/css">
@@ -96,7 +96,7 @@ npm run distribute
 
 The folder that gets created contains all the components, themes, and utilities that will be need for the npm package.
 
-![Component Factory](/readme-images/factory.png)
+<img src="/readme-images/factory.png" alt="Component Factory" width="400"/>
 
 Create a package.json file in the created folder making sure it is OUTSIDE the `factory-utils` folder so that it doesn't removed and overwritten when running the `distribute` script again. Add package configuration needed for this. I would look over the Amazon's documentation for [this](https://aws.amazon.com/blogs/devops/publishing-private-npm-packages-aws-codeartifact/). It should look somewhat like the following:
 
