@@ -1,70 +1,131 @@
-# Getting Started with Create React App
+![StoryBoook logo](/readme-images/storybook.png)
+![Material UI logo](/readme-images/material-ui.png)
+![AWS Code Artifact logo](/readme-images/aws-codeartifact.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Storybook Example with Self-hosted Custom Fonts and Material UI Theme, then exporting components to NPM Package in AWS CodeArtifact
 
-## Available Scripts
+### Storybook
 
-In the project directory, you can run:
+My team needed a way of showing components to the stakeholders, the QA team, and the design team. By using storybook we are able to create components quickly have a place to display each component by passing it editable mock data using Template args.
 
-### `yarn start`
+```
+import React from "react";
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+import BasicCard from "../../factory/components/BasicCard/BasicCard.component";
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+export default {
+  title: "Basic Card",
+  component: BasicCard
+};
 
-### `yarn test`
+const Template = args => <BasicCard {...args} />;
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export const LargeImageCard = Template.bind({});
+LargeImageCard.args = {
+  title: "This is an example title",
+  url: "https://www.google.com",
+  summary: "This is some example text for description.",
+  thumbnail:
+    "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg",
+  altText: "This is some alt text",
+  author: "Gabriel Wong",
+  type: "large"
+};
+```
 
-### `yarn build`
+### Self-Hosted Fonts
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+One issue I encountered that was not documented well, was adding [custom self-hosted fonts](https://material-ui.com/customization/typography/#self-hosted-fonts) for Material UI. After doing a lot of digging, I found out there is still an outstanding issue dealing with self-hosted custom fonts ([https://github.com/mui-org/material-ui/issues/18901](https://github.com/mui-org/material-ui/issues/18901)). The work around solution I found is adding the @font-face in preview-head.html in .storybook folder.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Storybook Folder Structure](/readme-images/storybook-structure.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+<style type="text/css">
+  @font-face {
+    font-family: "IndieFlower";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("factory/utilities/fonts/Indie_Flower/IndieFlower-Regular.ttf")
+      format("truetype");
+  }
+</style>
+```
 
-### `yarn eject`
+Next, make sure script to start storybook points to .src in package.json.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+"scripts": {
+  ...
+  "storybook": "start-storybook -p 6006 -s ./src",
+  ...
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Exporting components to NPM Package in AWS CodeArtifact
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+We need to add babel to convert to JSX syntax in order for the package to be used properly.
+First, start off by installing @babel/cli as a dev dependency.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+npm install --save-dev @babel/cli
+```
 
-## Learn More
+Next, add @babel/preset-react as well.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+npm install --save-dev @babel/preset-react
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+We will now add a script in package.json to add the transpiled code from `src/factory` into an output folder, `component-factory-dist`, in our case.
 
-### Code Splitting
+```
+"scripts": {
+  ...
+  "distribute": "rm -rf component-factory-dist/factory-utils && mkdir -p component-factory-dist/factory-utils && babel src/factory -d component-factory-dist/factory-utils --copy-files"
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Run the `distribute` script we just created.
 
-### Analyzing the Bundle Size
+```
+npm run distribute
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The folder that gets created contains all the components, themes, and utilities that will be need for the npm package.
 
-### Making a Progressive Web App
+![Component Factory](/readme-images/factory.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Create a package.json file in the created folder making sure it is OUTSIDE the `factory-utils` folder so that it doesn't removed and overwritten when running the `distribute` script again. Add package configuration needed for this. I would look over the Amazon's documentation for [this](https://aws.amazon.com/blogs/devops/publishing-private-npm-packages-aws-codeartifact/). It should look somewhat like the following:
 
-### Advanced Configuration
+```
+{
+  "name": "@company/component-factory-dist",
+  "version": "1.0.0",
+  "description": "NPM Package",
+  "scripts": {
+    "getauthtoken": "npm config set //<COMPANY>-<ARN>.d.codeartifact.us-east-1.amazonaws.com/npm/Component-Factory/:always-auth=true",
+    "setnpm": "npm config set registry=https://<COMPANY>-<ARN>.d.codeartifact.us-east-1.amazonaws.com/npm/Component-Factory/",
+    "co:login": "aws codeartifact login --tool npm --repository Component-Factory --domain <COMPANY> --profile saml --region us-east-1",
+    "resetRegistry": "npm config set registry=https://registry.npmjs.com/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Gabriel Wong",
+  "license": "ISC"
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### In order to publish a package to CodeArtifact you will need to do the following:
 
-### Deployment
+- Make sure you have the latest AWSCLI Version 2.
+- cd into `media-component-factory-dist`
+- edit the package.json and update the version number if you have previously pushed the package to Code Artifact
+- login using saml2aws login
+- npm run getauthtoken
+- npm run setnpm
+- npm run co:login
+- npm publish
+- npm run resetRegistry _make sure you set the registry back to the default npm registry_
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Of course you would need to set up the AWS CodeArtifact beforehand. I will not be covering it here. You can find the documentation [here](https://aws.amazon.com/blogs/devops/integrating-aws-codeartifact-package-mgmt-flow/).
