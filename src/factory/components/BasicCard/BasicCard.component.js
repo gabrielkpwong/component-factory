@@ -56,6 +56,7 @@ export default function BasicCard({
                 isLarge ? classes.playButtonLarge : classes.playButtonSmall
               }
               fontSize="inherit"
+              titleAccess={`Play icon indicating that ${title} contains a video`}
             />
           )}
         </Box>

@@ -7,8 +7,9 @@ function PlayButton(props) {
         className="MuiSvgIcon-custom icon_play"
         focusable="false"
         viewBox="0 0 24 24"
-        aria-hidden="true"
+        aria-labelledby="playTitle"
       >
+        <title id="playTitle">{props.titleAccess}</title>
         <g>
           <circle
             className="icon_play-circle"
