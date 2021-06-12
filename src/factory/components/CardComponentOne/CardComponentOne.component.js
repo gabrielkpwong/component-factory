@@ -23,12 +23,7 @@ export default function CardComponentOne(props) {
       {({ media, heading, button }) => (
         <Card className={classes.root} elevation={0}>
           <Grid container spacing={2}>
-            <Grid
-              item
-              xs={type === "stacked" ? 12 : 6}
-              container
-              justify="center"
-            >
+            <Grid item xs={type === "stacked" ? 12 : 6} container>
               {media}
             </Grid>
             <Grid
