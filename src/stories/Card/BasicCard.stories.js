@@ -1,5 +1,8 @@
 import React from "react";
 
+import DarkTheme from "../../factory/themes/dark-theme";
+import { ThemeProvider } from "@material-ui/core/styles";
+
 import BasicCard from "../../factory/components/BasicCard/BasicCard.component";
 
 export default {
@@ -44,6 +47,13 @@ LargeDarkThemeVideoCard.args = {
   type: "large_video",
   playButton: true
 };
+LargeDarkThemeVideoCard.decorators = [
+  Story => (
+    <ThemeProvider theme={DarkTheme}>
+      <Story />
+    </ThemeProvider>
+  )
+];
 
 export const CompactDarkThemeVideoCard = Template.bind({});
 CompactDarkThemeVideoCard.args = {
@@ -56,3 +66,10 @@ CompactDarkThemeVideoCard.args = {
   type: "compact_video",
   playButton: true
 };
+CompactDarkThemeVideoCard.decorators = [
+  Story => (
+    <ThemeProvider theme={DarkTheme}>
+      <Story />
+    </ThemeProvider>
+  )
+];

@@ -5,8 +5,10 @@ function PlayButton(props) {
     className: "MuiSvgIcon-custom icon_play",
     focusable: "false",
     viewBox: "0 0 24 24",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("circle", {
+    "aria-labelledby": "playTitle"
+  }, /*#__PURE__*/React.createElement("title", {
+    id: "playTitle"
+  }, props.titleAccess), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("circle", {
     className: "icon_play-circle",
     fill: "#E7131A",
     cx: "12",

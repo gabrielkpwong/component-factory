@@ -131,3 +131,23 @@ Create a package.json file in the created folder making sure it is OUTSIDE the `
 - npm run resetRegistry _make sure you set the registry back to the default npm registry_
 
 Of course you would need to set up the AWS CodeArtifact beforehand. I will not be covering it here. You can find the documentation [here](https://aws.amazon.com/blogs/devops/integrating-aws-codeartifact-package-mgmt-flow/).
+
+### Formatting of Code Artifact package.json
+
+```
+{
+  "name": "@company/component-factory-dist",
+  "version": "1.0.0",
+  "description": "NPM Package",
+  "scripts": {
+    "getauthtoken": "npm config set //<COMPANY>-<ARN>.d.codeartifact.us-east-1.amazonaws.com/npm/Component-Factory/:always-auth=true",
+    "setnpm": "npm config set registry=https://<COMPANY>-<ARN>.d.codeartifact.us-east-1.amazonaws.com/npm/Component-Factory/",
+    "co:login": "aws codeartifact login --tool npm --repository Component-Factory --domain <COMPANY> --profile saml --region us-east-1",
+    "resetRegistry": "npm config set registry=https://registry.npmjs.com/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Gabriel Wong",
+  "license": "ISC"
+}
+```

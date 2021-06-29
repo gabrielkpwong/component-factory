@@ -15,7 +15,7 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/preset-create-react-app",
-    "storybook-addon-material-ui"
+    "@harelpls/storybook-addon-materialui"
   ]
   /*webpackFinal: config => {
     console.log(config.module.rules);
